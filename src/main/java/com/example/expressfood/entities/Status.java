@@ -11,7 +11,7 @@ import java.util.Collection;
 @AllArgsConstructor @NoArgsConstructor @Data
 public class Status {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int statusId;
+    private Long statusId;
     private String label;
     @OneToMany(mappedBy = "status")
     private Collection<Orders> orders;

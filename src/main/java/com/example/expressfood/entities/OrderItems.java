@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor @NoArgsConstructor @Data
 public class OrderItems {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int orderItemId;
+    private Long orderItemId;
     @ManyToOne
     private Orders order;
     @ManyToOne

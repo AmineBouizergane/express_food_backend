@@ -16,7 +16,7 @@ import java.util.Date;
 public class Cook extends User{
     @OneToMany(mappedBy = "cook")
     private Collection<Orders> orders;
-    public Cook(int id, String firstName, String lastName, Date birthDay, String phoneNumber, String address, String avatarUrl, String userName, String encryptedPassword, Collection<Role> roles, Boolean isActivated) {
+    public Cook(Long id, String firstName, String lastName, Date birthDay, String phoneNumber, String address, String avatarUrl, String userName, String encryptedPassword, Collection<Role> roles, Boolean isActivated) {
         super(id, firstName, lastName, birthDay, phoneNumber, address, avatarUrl, userName, encryptedPassword, roles, isActivated);
     }
 }

@@ -11,8 +11,8 @@ import java.util.Collection;
 @AllArgsConstructor @NoArgsConstructor @Data
 public class Unite {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int uniteId;
+    private Long uniteId;
     private String label;
-    @OneToMany (mappedBy = "unite")
+    @OneToMany(mappedBy = "unite", fetch = FetchType.LAZY)
     private Collection<Product> products;
 }
