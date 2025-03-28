@@ -34,15 +34,12 @@ public class ProductController {
     @DeleteMapping("/product/{productId}")
     @PostAuthorize("hasAuthority('ADMIN')")
     public void deleteProduct(@PathVariable("productId") Long productId){
-        //MessageResponse messageResponse =
-                iProductService.deleteProduct(productId);
-        //return messageResponse;
+        iProductService.deleteProduct(productId);
     }
     @PutMapping("/product")
     @PostAuthorize("hasAuthority('ADMIN')")
     public ProductResponse updateProduct(@RequestBody ProductRequest product){
-        ProductResponse updatedProduct = iProductService.updateProduct(product);
-        return updatedProduct;
+        return iProductService.updateProduct(product);
     }
 
     @GetMapping("/product/{productId}")

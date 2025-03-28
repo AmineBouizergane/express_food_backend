@@ -26,10 +26,7 @@ public class CartItemsResponse implements Serializable {
         CartItemsResponse cartItemsResponse = new CartItemsResponse();
         BeanUtils.copyProperties(cartItems, cartItemsResponse);
         cartItemsResponse.setProduct(ProductResponse.fromEntity(cartItems.getProduct()));
-        if(cartItems.getQte() > 10)
-            cartItemsResponse.price = cartItems.getProduct().getWholesalePrice();
-        else
-            cartItemsResponse.price = cartItems.getProduct().getUnitPrice();
+        cartItemsResponse.price = cartItems.getProduct().getUnitPrice();
 
         return cartItemsResponse;
     }

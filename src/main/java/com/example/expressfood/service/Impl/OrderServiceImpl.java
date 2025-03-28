@@ -74,10 +74,7 @@ public class OrderServiceImpl implements IOrderService {
             OrderItems orderItem = new OrderItems();
             orderItem.setProduct(cartItem.getProduct());
             orderItem.setQte(cartItem.getQte());
-            if(cartItem.getQte() > 10)
-                orderItem.setUnitePrice(cartItem.getProduct().getWholesalePrice());
-            else
-                orderItem.setUnitePrice(cartItem.getProduct().getUnitPrice());
+            orderItem.setUnitePrice(cartItem.getProduct().getUnitPrice());
             orderItem.setTotalPrice(orderItem.getQte() * orderItem.getUnitePrice());
             totalPrice.updateAndGet(v -> v + orderItem.getTotalPrice());
             orderItemsList.add(orderItem);

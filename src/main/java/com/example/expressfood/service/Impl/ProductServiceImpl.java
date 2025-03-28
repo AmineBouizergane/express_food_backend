@@ -1,6 +1,7 @@
 package com.example.expressfood.service.Impl;
 
 import com.example.expressfood.dao.CategoryRepos;
+import com.example.expressfood.dao.FeedBackRepos;
 import com.example.expressfood.dao.ProductRepos;
 import com.example.expressfood.dao.UniteRepos;
 import com.example.expressfood.dto.request.ProductRequest;
@@ -13,6 +14,7 @@ import com.example.expressfood.exception.ProductException;
 import com.example.expressfood.exception.UniteException;
 import com.example.expressfood.service.IProductService;
 import com.example.expressfood.shared.MessagesEnum;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,14 +25,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements IProductService {
 
-    @Autowired
-    ProductRepos productRepos;
-    @Autowired
-    CategoryRepos categoryRepos;
-    @Autowired
-    UniteRepos uniteRepos;
+    private final ProductRepos productRepos;
+
+    private final CategoryRepos categoryRepos;
+
+    private final UniteRepos uniteRepos;
+
+    private final FeedBackRepos feedBackRepos;
 
     @Override
     //FIXME : Remove isValid()
@@ -85,7 +89,14 @@ public class ProductServiceImpl implements IProductService {
     public ProductResponse getProductById(Long id) {
        Product product = productRepos.findByProductIdAndIsDeletedFalse(id)
                .orElseThrow(() -> new ProductException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage()));
-        return ProductResponse.fromEntity(product);
+        ProductResponse productResponse = ProductResponse.fromEntity(product);
+        if(product.getFeedBacks().isEmpty()){
+            productResponse.setAvgRating(5);
+        }else{
+            double avgRating = feedBackRepos.getAverageRatingByProductId(product.getProductId());
+            productResponse.setAvgRating(avgRating);
+        }
+        return productResponse;
     }
 
     @Override
@@ -96,7 +107,13 @@ public class ProductServiceImpl implements IProductService {
         pageResponse.setSize(size);
         pageResponse.setTotalPage(productPage.getTotalPages());
         List<ProductResponse> productResponse = productPage.getContent().stream()
-                .map(ProductResponse::fromEntity)
+                .map(product -> {
+                    ProductResponse response = ProductResponse.fromEntity(product);
+                    double avgRating = product.getFeedBacks().isEmpty() ? 5
+                            : feedBackRepos.getAverageRatingByProductId(product.getProductId());
+                    response.setAvgRating(avgRating);
+                    return response;
+                })
                 .collect(Collectors.toList());
         pageResponse.setContent(productResponse);
         if (pageResponse.getContent().isEmpty())
@@ -113,7 +130,13 @@ public class ProductServiceImpl implements IProductService {
         pageResponse.setSize(size);
         pageResponse.setTotalPage(productPage.getTotalPages());
         List<ProductResponse> productResponse = productPage.getContent().stream()
-                .map(ProductResponse::fromEntity)
+                .map(product -> {
+                    ProductResponse response = ProductResponse.fromEntity(product);
+                    double avgRating = product.getFeedBacks().isEmpty() ? 5
+                            : feedBackRepos.getAverageRatingByProductId(product.getProductId());
+                    response.setAvgRating(avgRating);
+                    return response;
+                })
                 .collect(Collectors.toList());
         pageResponse.setContent(productResponse);
         if (pageResponse.getContent().isEmpty())
@@ -132,7 +155,13 @@ public class ProductServiceImpl implements IProductService {
         pageResponse.setSize(size);
         pageResponse.setTotalPage(productPage.getTotalPages());
         List<ProductResponse> productResponseList = productPage.getContent().stream()
-                .map(ProductResponse::fromEntity)
+                .map(product -> {
+                    ProductResponse response = ProductResponse.fromEntity(product);
+                    double avgRating = product.getFeedBacks().isEmpty() ? 5
+                            : feedBackRepos.getAverageRatingByProductId(product.getProductId());
+                    response.setAvgRating(avgRating);
+                    return response;
+                })
                 .collect(Collectors.toList());
         pageResponse.setContent(productResponseList);
         if (pageResponse.getContent().isEmpty())
@@ -151,7 +180,13 @@ public class ProductServiceImpl implements IProductService {
         pageResponse.setSize(size);
         pageResponse.setTotalPage(productPage.getTotalPages());
         List<ProductResponse> productResponseList = productPage.getContent().stream()
-                .map(ProductResponse::fromEntity)
+                .map(product -> {
+                    ProductResponse response = ProductResponse.fromEntity(product);
+                    double avgRating = product.getFeedBacks().isEmpty() ? 5
+                            : feedBackRepos.getAverageRatingByProductId(product.getProductId());
+                    response.setAvgRating(avgRating);
+                    return response;
+                })
                 .collect(Collectors.toList());
         pageResponse.setContent(productResponseList);
         if (pageResponse.getContent().isEmpty())
@@ -168,7 +203,13 @@ public class ProductServiceImpl implements IProductService {
         pageResponse.setSize(size);
         pageResponse.setTotalPage(productPage.getTotalPages());
         List<ProductResponse> productResponseList = productPage.getContent().stream()
-                .map(ProductResponse::fromEntity)
+                .map(product -> {
+                    ProductResponse response = ProductResponse.fromEntity(product);
+                    double avgRating = product.getFeedBacks().isEmpty() ? 5
+                            : feedBackRepos.getAverageRatingByProductId(product.getProductId());
+                    response.setAvgRating(avgRating);
+                    return response;
+                })
                 .collect(Collectors.toList());
         pageResponse.setContent(productResponseList);
         if (pageResponse.getContent().isEmpty())
@@ -192,7 +233,13 @@ public class ProductServiceImpl implements IProductService {
         pageResponse.setSize(size);
         pageResponse.setTotalPage(productPage.getTotalPages());
         List<ProductResponse> productResponseList = productPage.getContent().stream()
-                .map(ProductResponse::fromEntity)
+                .map(product -> {
+                    ProductResponse response = ProductResponse.fromEntity(product);
+                    double avgRating = product.getFeedBacks().isEmpty() ? 5
+                            : feedBackRepos.getAverageRatingByProductId(product.getProductId());
+                    response.setAvgRating(avgRating);
+                    return response;
+                })
                 .collect(Collectors.toList());
         pageResponse.setContent(productResponseList);
         if (pageResponse.getContent().isEmpty())

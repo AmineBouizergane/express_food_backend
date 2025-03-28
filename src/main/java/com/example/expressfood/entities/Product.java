@@ -24,8 +24,6 @@ public class Product {
     private LocalDateTime createdAt;
     @NonNull
     private Double unitPrice;
-    @NonNull
-    private Double wholesalePrice;
     @ManyToOne
     @NonNull
     private Unite unite;
@@ -43,7 +41,6 @@ public class Product {
 
         if(this.name == null || this.name.equals("")
                 || this.unitPrice < 0 || this.unitPrice == null
-                || this.wholesalePrice <0 || this.wholesalePrice == null
                 || this.unite == null || this.category == null
                 || this.isDeleted == null || this.isAvailable == null)
             throw new ProductException(ErrorMessages.INVALID_ENTITY.getErrorMessage());
