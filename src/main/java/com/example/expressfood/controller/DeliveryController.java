@@ -2,20 +2,18 @@ package com.example.expressfood.controller;
 
 import com.example.expressfood.dto.request.DeliveryPersonRequest;
 import com.example.expressfood.dto.response.DeliveryPersonResponse;
-import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.dto.response.PageResponse;
 import com.example.expressfood.service.IDeliveryService;
-import com.example.expressfood.shared.RoleEnum;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
+@RequiredArgsConstructor
 public class DeliveryController {
 
-    @Autowired
     IDeliveryService iDeliveryPersonService;
 
     @PostMapping("/deliveryPerson")

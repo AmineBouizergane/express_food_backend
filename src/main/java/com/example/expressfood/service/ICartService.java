@@ -1,9 +1,7 @@
 package com.example.expressfood.service;
 
-import com.example.expressfood.dto.request.CartItemRequest;
 import com.example.expressfood.dto.response.CartResponse;
 import com.example.expressfood.dto.response.MessageResponse;
-import com.example.expressfood.entities.Cart;
 import com.example.expressfood.entities.CartItems;
 import com.example.expressfood.entities.Client;
 

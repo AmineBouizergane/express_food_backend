@@ -1,5 +1,6 @@
 package com.example.expressfood.controller;
 
+import com.example.expressfood.shared.Constants;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -47,7 +48,7 @@ public class ImageController {
         }
 
         try {
-            file.transferTo(new File(uploadDirectory + "/" + file.getOriginalFilename()));
+            file.transferTo(new File(uploadDirectory + Constants.PATH_DELIMITER + file.getOriginalFilename()));
             return ResponseEntity.ok("File uploaded successfully: " + file.getOriginalFilename());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file");

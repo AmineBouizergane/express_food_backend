@@ -1,19 +1,12 @@
 package com.example.expressfood.dto.response;
 
-import com.example.expressfood.dao.OrdersRepos;
 import com.example.expressfood.entities.Cook;
-import com.example.expressfood.entities.Orders;
-import com.example.expressfood.entities.Role;
-import com.example.expressfood.entities.User;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.BeanUtils;
 
-import javax.persistence.OneToMany;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 
 @Data

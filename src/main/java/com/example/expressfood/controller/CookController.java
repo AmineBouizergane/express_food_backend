@@ -2,20 +2,19 @@ package com.example.expressfood.controller;
 
 import com.example.expressfood.dto.request.CookRequest;
 import com.example.expressfood.dto.response.CookResponse;
-import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.dto.response.PageResponse;
 import com.example.expressfood.service.ICookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
+@RequiredArgsConstructor
 public class CookController {
 
-    @Autowired
-    ICookService iCookService;
+    private final ICookService iCookService;
 
     @PostMapping("/cook")
     @PreAuthorize("hasAuthority('ADMIN')")

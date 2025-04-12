@@ -1,7 +1,5 @@
 package com.example.expressfood.dao;
 
-import com.example.expressfood.entities.Client;
-import com.example.expressfood.entities.Cook;
 import com.example.expressfood.entities.DeliveryPerson;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

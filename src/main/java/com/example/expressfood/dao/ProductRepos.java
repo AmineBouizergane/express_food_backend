@@ -2,12 +2,14 @@ package com.example.expressfood.dao;
 
 import com.example.expressfood.entities.Category;
 import com.example.expressfood.entities.Product;
+import com.example.expressfood.entities.RawMaterials;
 import com.example.expressfood.entities.Unite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepos extends JpaRepository<Product, Long> {
@@ -25,4 +27,8 @@ public interface ProductRepos extends JpaRepository<Product, Long> {
 
     @Query("SELECT COUNT(p) FROM Product p WHERE p.category = :category")
     Long countProductsByCategory(Category category);
+
+    @Query("SELECT rm FROM Product p JOIN p.rawMaterials rm WHERE p.productId = :productId AND rm.isCustomised = true")
+    List<RawMaterials> findCustomizedRawMaterialsByProductId(Long productId);
+
 }

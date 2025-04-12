@@ -1,4 +1,4 @@
-package com.example.expressfood.service.Impl;
+package com.example.expressfood.service.impl;
 
 import com.example.expressfood.dao.CartRepos;
 import com.example.expressfood.dao.ClientRepos;
@@ -15,6 +15,7 @@ import com.example.expressfood.exception.UserException;
 import com.example.expressfood.service.IClientService;
 import com.example.expressfood.service.IUserService;
 import com.example.expressfood.shared.RoleEnum;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,17 +32,18 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ClientServiceImpl implements IClientService {
 
-    @Autowired
-    ClientRepos clientRepos;
-    @Autowired
-    RoleRepos roleRepos;
-    @Autowired
-    CartRepos cartRepos;
-    @Autowired
-    IUserService iUserService;
-    @Autowired
+
+    private final ClientRepos clientRepos;
+
+    private final RoleRepos roleRepos;
+
+    private final CartRepos cartRepos;
+
+    private final IUserService iUserService;
+
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
@@ -89,23 +91,16 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public PageResponse<ClientResponse> getAllClient(int page, int size) {
         Page<Client> clientList = clientRepos.findAll(PageRequest.of(page, size));
-        PageResponse<ClientResponse> clientResponseList = new PageResponse<>();
-        clientResponseList.setPage(page);
-        clientResponseList.setSize(size);
-        clientResponseList.setTotalPage(clientList.getTotalPages());
-        List<ClientResponse> clientResponses = clientList.getContent().stream()
-                .map(ClientResponse::fromEntity)
-                .collect(Collectors.toList());
-        clientResponseList.setContent(clientResponses);
-        if (clientResponseList.getContent().isEmpty())
-            throw new UserException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
-        else
-            return clientResponseList;
+        return getClientResponsePageResponse(page, size, clientList);
     }
 
     @Override
     public PageResponse<ClientResponse> searchClient(int page, int size, String keyword) {
         Page<Client> clientsList = clientRepos.findByFirstNameOrLastNameContaining(keyword, PageRequest.of(page, size));
+        return getClientResponsePageResponse(page, size, clientsList);
+    }
+
+    private PageResponse<ClientResponse> getClientResponsePageResponse(int page, int size, Page<Client> clientsList) {
         PageResponse<ClientResponse> clientResponseList = new PageResponse<>();
         clientResponseList.setPage(page);
         clientResponseList.setSize(size);

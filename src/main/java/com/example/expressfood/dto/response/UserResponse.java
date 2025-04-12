@@ -1,8 +1,5 @@
 package com.example.expressfood.dto.response;
 
-import com.example.expressfood.entities.Client;
-import com.example.expressfood.entities.Product;
-import com.example.expressfood.entities.Role;
 import com.example.expressfood.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.BeanUtils;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 
 @Data

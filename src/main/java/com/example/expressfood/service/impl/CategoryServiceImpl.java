@@ -1,43 +1,31 @@
-package com.example.expressfood.service.Impl;
+package com.example.expressfood.service.impl;
 
 import com.example.expressfood.dao.CategoryRepos;
 import com.example.expressfood.dao.ProductRepos;
 import com.example.expressfood.dto.request.CategoryRequest;
-import com.example.expressfood.dto.response.*;
+import com.example.expressfood.dto.response.CategoryResponse;
+import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.entities.Category;
 import com.example.expressfood.exception.CategoryException;
 import com.example.expressfood.exception.ErrorMessages;
 import com.example.expressfood.service.ICategoryService;
 import com.example.expressfood.shared.MessagesEnum;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements ICategoryService {
 
-    @Autowired
-    CategoryRepos categoryRepos;
-    @Autowired
-    ProductRepos productRepos;
+    private final CategoryRepos categoryRepos;
+    private final ProductRepos productRepos;
 
     @Override
-    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryRequest, category);
-        Category savedCategory =  categoryRepos.save(category);
-        CategoryResponse categoryResponse = new CategoryResponse();
-        BeanUtils.copyProperties(savedCategory, categoryResponse);
-        return categoryResponse;
-    }
-
-    @Override
-    public CategoryResponse updateCategory(CategoryRequest categoryRequest) {
+    public CategoryResponse addOrUpdateCategory(CategoryRequest categoryRequest) {
         Category category = new Category();
         BeanUtils.copyProperties(categoryRequest, category);
         Category savedCategory =  categoryRepos.save(category);

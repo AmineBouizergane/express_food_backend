@@ -1,7 +1,9 @@
 package com.example.expressfood.shared;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum MessagesEnum {
 
@@ -22,7 +24,4 @@ public enum MessagesEnum {
 
     private final String message;
 
-    public String getMessage() {
-        return message;
-    }
 }

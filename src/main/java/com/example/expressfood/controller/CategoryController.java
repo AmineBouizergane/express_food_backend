@@ -1,14 +1,10 @@
 package com.example.expressfood.controller;
 
 import com.example.expressfood.dto.request.CategoryRequest;
-import com.example.expressfood.dto.request.UniteRequest;
 import com.example.expressfood.dto.response.CategoryResponse;
 import com.example.expressfood.dto.response.MessageResponse;
-import com.example.expressfood.dto.response.PageResponse;
-import com.example.expressfood.dto.response.UniteResponse;
 import com.example.expressfood.service.ICategoryService;
-import com.example.expressfood.service.ICookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,21 +12,21 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
 public class CategoryController {
 
-    @Autowired
-    ICategoryService iCategoryService;
+    private final ICategoryService iCategoryService;
 
     @PostMapping("/category")
     @PreAuthorize("hasAuthority('ADMIN')")
     public CategoryResponse addCategory(@RequestBody CategoryRequest categoryRequest){
-        return iCategoryService.addCategory(categoryRequest);
+        return iCategoryService.addOrUpdateCategory(categoryRequest);
     }
 
     @PutMapping("/category")
     @PreAuthorize("hasAuthority('ADMIN')")
     public CategoryResponse updateCategory(@RequestBody CategoryRequest categoryRequest){
-        return iCategoryService.updateCategory(categoryRequest);
+        return iCategoryService.addOrUpdateCategory(categoryRequest);
     }
 
     @DeleteMapping("/category")

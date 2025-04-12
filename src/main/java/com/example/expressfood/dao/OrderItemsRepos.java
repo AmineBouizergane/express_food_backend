@@ -1,6 +1,5 @@
 package com.example.expressfood.dao;
 
-import com.example.expressfood.entities.DeliveryPerson;
 import com.example.expressfood.entities.OrderItems;
 import org.springframework.data.jpa.repository.JpaRepository;
 

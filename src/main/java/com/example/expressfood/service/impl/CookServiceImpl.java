@@ -1,12 +1,10 @@
-package com.example.expressfood.service.Impl;
+package com.example.expressfood.service.impl;
 
 import com.example.expressfood.dao.CookRepos;
 import com.example.expressfood.dao.RoleRepos;
 import com.example.expressfood.dto.request.CookRequest;
-import com.example.expressfood.dto.response.ClientResponse;
 import com.example.expressfood.dto.response.CookResponse;
 import com.example.expressfood.dto.response.PageResponse;
-import com.example.expressfood.entities.Client;
 import com.example.expressfood.entities.Cook;
 import com.example.expressfood.entities.Role;
 import com.example.expressfood.entities.User;
@@ -14,7 +12,9 @@ import com.example.expressfood.exception.ErrorMessages;
 import com.example.expressfood.exception.UserException;
 import com.example.expressfood.service.ICookService;
 import com.example.expressfood.service.IUserService;
+import com.example.expressfood.shared.Constants;
 import com.example.expressfood.shared.RoleEnum;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,16 +31,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class CookServiceImpl implements ICookService {
 
-    @Autowired
-    CookRepos cookRepos;
+    private final CookRepos cookRepos;
 
-    @Autowired
-    RoleRepos roleRepos;
-    @Autowired
-    IUserService iUserService;
-    @Autowired
+    private final RoleRepos roleRepos;
+
+    private final IUserService iUserService;
+
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
@@ -52,7 +51,7 @@ public class CookServiceImpl implements ICookService {
         roles.add(roleRepos.findByRoleName(RoleEnum.USER.value()));
         roles.add(roleRepos.findByRoleName(RoleEnum.COOK.value()));
         cook.setRoles(roles);
-        cook.setEncryptedPassword(bCryptPasswordEncoder().encode("First"));
+        cook.setEncryptedPassword(bCryptPasswordEncoder().encode(Constants.DEFAULT_PASSWORD));
         cook.setUserName(cook.getFirstName().toLowerCase()+"_"+cook.getLastName().toLowerCase());
         Cook savedCook = cookRepos.save(cook);
         return CookResponse.fromEntity(savedCook);

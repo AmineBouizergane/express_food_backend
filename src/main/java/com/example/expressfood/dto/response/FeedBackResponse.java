@@ -1,7 +1,6 @@
 package com.example.expressfood.dto.response;
 
 
-import com.example.expressfood.entities.Cook;
 import com.example.expressfood.entities.FeedBack;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,8 @@
-package com.example.expressfood.service.Impl;
+package com.example.expressfood.service.impl;
 
 import com.example.expressfood.dao.CartItemsRepos;
 import com.example.expressfood.dao.CartRepos;
-import com.example.expressfood.dao.ClientRepos;
 import com.example.expressfood.dao.ProductRepos;
-import com.example.expressfood.dto.request.CartItemRequest;
 import com.example.expressfood.dto.response.CartResponse;
 import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.entities.Cart;
@@ -14,28 +12,26 @@ import com.example.expressfood.entities.Product;
 import com.example.expressfood.exception.CartException;
 import com.example.expressfood.exception.ErrorMessages;
 import com.example.expressfood.exception.ProductException;
-import com.example.expressfood.exception.UserException;
 import com.example.expressfood.service.ICartService;
 import com.example.expressfood.service.IClientService;
 import com.example.expressfood.shared.MessagesEnum;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CartServiceImpl implements ICartService {
+    
+    private final CartRepos cartRepos;
 
-    @Autowired
-    CartRepos cartRepos;
-    @Autowired
-    CartItemsRepos cartItemsRepos;
-    @Autowired
-    ProductRepos productRepos;
+    private final CartItemsRepos cartItemsRepos;
 
-    @Autowired
-    IClientService clientService;
+    private final ProductRepos productRepos;
+
+    private final IClientService clientService;
 
     @Override
     public CartResponse getCartOfClient() {
@@ -91,10 +87,8 @@ public class CartServiceImpl implements ICartService {
         Cart cart = cartRepos.findCardByClient(client)
                 .orElseThrow(() -> new CartException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage()));
         cart.getCartItems().forEach(
-                cartItems -> {
-                    System.out.println("Cart item Id : "+cartItems.getCardItemId());
-                    cartItemsRepos.deleteById(cartItems.getCardItemId());
-                }
+                cartItems ->
+                    cartItemsRepos.deleteById(cartItems.getCardItemId())
         );
     }
 
@@ -108,8 +102,6 @@ public class CartServiceImpl implements ICartService {
     @Override
     public int getCartItemCount() {
         Client client = clientService.getAuthenticatedClient();
-        int cartItemCount = 0;
-        cartItemCount = cartRepos.countCartItemsByClient(client);
-        return cartItemCount;
+        return cartRepos.countCartItemsByClient(client);
     }
 }

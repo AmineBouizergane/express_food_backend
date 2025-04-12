@@ -1,16 +1,11 @@
 package com.example.expressfood.controller;
 
-import com.example.expressfood.dto.request.ClientRequest;
 import com.example.expressfood.dto.request.OrderRequest;
-import com.example.expressfood.dto.response.ClientResponse;
 import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.dto.response.OrderResponse;
 import com.example.expressfood.dto.response.PageResponse;
-import com.example.expressfood.service.ICartService;
-import com.example.expressfood.service.IClientService;
 import com.example.expressfood.service.IOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,9 +15,10 @@ import java.util.Date;
 
 @RestController
 @CrossOrigin("*")
+@RequiredArgsConstructor
 public class OrderController {
-    @Autowired
-    IOrderService iOrderService;
+
+    private final IOrderService iOrderService;
 
     @PostMapping("/order")
     @PostAuthorize("hasAuthority('CLIENT')")

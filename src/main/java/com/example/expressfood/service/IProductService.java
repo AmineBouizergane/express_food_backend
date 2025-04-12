@@ -1,6 +1,5 @@
 package com.example.expressfood.service;
 
-import com.example.expressfood.dto.request.CategoryRequest;
 import com.example.expressfood.dto.request.ProductRequest;
 import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.dto.response.PageResponse;
@@ -8,7 +7,7 @@ import com.example.expressfood.dto.response.ProductResponse;
 
 public interface IProductService {
     ProductResponse addProduct(ProductRequest productRequest);
-    MessageResponse deleteProduct(Long productId);
+    void deleteProduct(Long productId);
     ProductResponse updateProduct(ProductRequest productRequest);
     ProductResponse getProductById(Long id);
     PageResponse<ProductResponse> getProducts(int page, int size);

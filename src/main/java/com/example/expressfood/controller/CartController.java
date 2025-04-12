@@ -1,25 +1,17 @@
 package com.example.expressfood.controller;
 
-import com.example.expressfood.dto.request.CartItemRequest;
 import com.example.expressfood.dto.response.CartResponse;
 import com.example.expressfood.dto.response.MessageResponse;
-import com.example.expressfood.entities.Cart;
-import com.example.expressfood.entities.CartItems;
-import com.example.expressfood.entities.Client;
-import com.example.expressfood.exception.CartException;
-import com.example.expressfood.exception.ErrorMessages;
-import com.example.expressfood.exception.UserException;
 import com.example.expressfood.service.ICartService;
-import com.example.expressfood.service.IClientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 public class CartController {
 
-    @Autowired
-    ICartService iCartService;
+    private final ICartService iCartService;
 
     @GetMapping("/cart")
     @PreAuthorize("hasAuthority('CLIENT')")

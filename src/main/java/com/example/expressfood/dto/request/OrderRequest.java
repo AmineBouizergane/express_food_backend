@@ -1,21 +1,18 @@
 package com.example.expressfood.dto.request;
 
-import com.example.expressfood.dto.response.*;
-import com.example.expressfood.entities.*;
-import lombok.*;
-import org.hibernate.criterion.Order;
-import org.springframework.beans.BeanUtils;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor @NoArgsConstructor @ToString
 public class OrderRequest implements Serializable {
     private String address;
     private String description;
+    private List<CustomisationRequest> customisation;
 
 }

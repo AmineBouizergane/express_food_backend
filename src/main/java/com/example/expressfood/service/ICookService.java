@@ -3,7 +3,6 @@ package com.example.expressfood.service;
 import com.example.expressfood.dto.request.CookRequest;
 import com.example.expressfood.dto.response.CookResponse;
 import com.example.expressfood.dto.response.PageResponse;
-import com.example.expressfood.entities.Client;
 import com.example.expressfood.entities.Cook;
 
 import java.util.Collection;

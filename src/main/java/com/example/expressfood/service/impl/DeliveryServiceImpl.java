@@ -1,4 +1,4 @@
-package com.example.expressfood.service.Impl;
+package com.example.expressfood.service.impl;
 
 import com.example.expressfood.dao.DeliveryPersonRepos;
 import com.example.expressfood.dao.RoleRepos;
@@ -12,7 +12,9 @@ import com.example.expressfood.exception.ErrorMessages;
 import com.example.expressfood.exception.UserException;
 import com.example.expressfood.service.IDeliveryService;
 import com.example.expressfood.service.IUserService;
+import com.example.expressfood.shared.Constants;
 import com.example.expressfood.shared.RoleEnum;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,14 +31,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DeliveryServiceImpl implements IDeliveryService {
-    @Autowired
-    DeliveryPersonRepos deliveryPersonRepos;
-    @Autowired
-    RoleRepos roleRepos;
-    @Autowired
-    IUserService iUserService;
-    @Autowired
+
+    private final DeliveryPersonRepos deliveryPersonRepos;
+
+    private final RoleRepos roleRepos;
+
+    private final IUserService iUserService;
+
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
@@ -48,7 +51,7 @@ public class DeliveryServiceImpl implements IDeliveryService {
         roles.add(roleRepos.findByRoleName(RoleEnum.USER.value()));
         roles.add(roleRepos.findByRoleName(RoleEnum.DELIVERY.value()));
         deliveryPerson.setRoles(roles);
-        deliveryPerson.setEncryptedPassword(bCryptPasswordEncoder().encode("First"));
+        deliveryPerson.setEncryptedPassword(bCryptPasswordEncoder().encode(Constants.DEFAULT_PASSWORD));
         deliveryPerson.setUserName(deliveryPerson.getFirstName().toLowerCase()+"_"+deliveryPerson.getLastName().toLowerCase());
         deliveryPerson.setEncryptedPassword(bCryptPasswordEncoder().encode(deliveryPerson.getEncryptedPassword()));
         DeliveryPerson savedDelivery = deliveryPersonRepos.save(deliveryPerson);

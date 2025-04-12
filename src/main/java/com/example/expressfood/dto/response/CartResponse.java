@@ -1,15 +1,12 @@
 package com.example.expressfood.dto.response;
 
 import com.example.expressfood.entities.Cart;
-import com.example.expressfood.entities.CartItems;
-import com.example.expressfood.entities.Client;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.BeanUtils;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;

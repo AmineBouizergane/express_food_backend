@@ -1,6 +1,5 @@
 package com.example.expressfood.dto.request;
 
-import com.example.expressfood.entities.Client;
 import com.example.expressfood.entities.DeliveryPerson;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -43,7 +43,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
-        System.out.println("successfulAuthentication");
         User user=(User) authResult.getPrincipal();
 
         Algorithm algorithm=Algorithm.HMAC256(JWTUtil.SECRET);
@@ -55,15 +54,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-       /* String jwtRefreshToken= JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis()+JWTUtil.EXPIRE_REFRESH_TOKEN))
-                .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);*/
-
         Map<String, String> idToken=new HashMap<>();
         idToken.put("token",jwtAccessToken);
-        //idToken.put("refreshToken",jwtRefreshToken);
         response.setContentType("application/json");
         new ObjectMapper().writeValue(response.getOutputStream(),idToken);
     }

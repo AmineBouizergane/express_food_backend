@@ -1,35 +1,27 @@
 package com.example.expressfood.controller;
 
-import com.example.expressfood.dto.request.CategoryRequest;
 import com.example.expressfood.dto.request.ProductRequest;
 import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.dto.response.PageResponse;
 import com.example.expressfood.dto.response.ProductResponse;
-import com.example.expressfood.entities.Category;
 import com.example.expressfood.service.IProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
 public class ProductController {
 
-    @Autowired
-    IProductService iProductService;
+    private final IProductService iProductService;
 
     @PostMapping("/product")
     @PostAuthorize("hasAuthority('ADMIN')")
     public ProductResponse addProduct(@RequestBody ProductRequest productRequest){
-        ProductResponse savedProduct =  iProductService.addProduct(productRequest);
-       return savedProduct;
+       return iProductService.addProduct(productRequest);
     }
     @DeleteMapping("/product/{productId}")
     @PostAuthorize("hasAuthority('ADMIN')")
@@ -53,16 +45,14 @@ public class ProductController {
     @PostAuthorize("hasAuthority('ADMIN')")
     public PageResponse<ProductResponse> getProducts(@RequestParam(required = false, defaultValue = "0") int page,
                                                      @RequestParam(required = false, defaultValue = "10") int size){
-        PageResponse<ProductResponse> productList = iProductService.getProducts(page, size);
-        return productList;
+        return iProductService.getProducts(page, size);
     }
 
     @GetMapping("/product/available")
     @PostAuthorize("hasAuthority('USER')")
     public PageResponse<ProductResponse> getAvailableProducts(@RequestParam(required = false, defaultValue = "0") int page,
                                                      @RequestParam(required = false, defaultValue = "10") int size){
-        PageResponse<ProductResponse> productList = iProductService.getAvailableProducts(page, size);
-        return productList;
+        return iProductService.getAvailableProducts(page, size);
     }
 
     @GetMapping("/product/category")
@@ -70,16 +60,14 @@ public class ProductController {
     public PageResponse<ProductResponse> getProductsByCategory(@RequestParam Long categoryId,
                                                      @RequestParam(required = false, defaultValue = "0") int page,
                                                      @RequestParam(required = false, defaultValue = "10") int size){
-        PageResponse<ProductResponse> productList = iProductService.getProductsByCategory(categoryId, page, size);
-        return productList;
+        return iProductService.getProductsByCategory(categoryId, page, size);
     }
     @GetMapping("/product/available/category")
     @PreAuthorize("hasAuthority('USER')")
     public PageResponse<ProductResponse> getAvailableProductsByCategory(@RequestParam Long categoryId,
                                                                @RequestParam(required = false, defaultValue = "0") int page,
                                                                @RequestParam(required = false, defaultValue = "10") int size){
-        PageResponse<ProductResponse> productList = iProductService.getAvailableProductsByCategory(categoryId, page, size);
-        return productList;
+        return iProductService.getAvailableProductsByCategory(categoryId, page, size);
     }
 
 
@@ -88,8 +76,7 @@ public class ProductController {
     public PageResponse<ProductResponse> getProductsByKeyword(@RequestParam("keyword") String keyword,
                                                     @RequestParam(required = false, defaultValue = "0") int page,
                                                     @RequestParam(required = false, defaultValue = "10") int size){
-        PageResponse<ProductResponse> productList = iProductService.getProductsByKeyword(keyword, page, size);
-        return productList;
+        return iProductService.getProductsByKeyword(keyword, page, size);
     }
 
 

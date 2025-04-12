@@ -1,7 +1,6 @@
 package com.example.expressfood.shared;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 public enum RoleEnum {

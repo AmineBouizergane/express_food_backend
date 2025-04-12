@@ -6,7 +6,6 @@ import com.example.expressfood.entities.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public interface CartItemsRepos extends JpaRepository<CartItems, Long> {

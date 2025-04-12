@@ -2,18 +2,17 @@ package com.example.expressfood.controller;
 
 import com.example.expressfood.dto.request.ClientRequest;
 import com.example.expressfood.dto.response.ClientResponse;
-import com.example.expressfood.dto.response.MessageResponse;
 import com.example.expressfood.dto.response.PageResponse;
 import com.example.expressfood.service.IClientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 public class ClientController {
 
-    @Autowired
-    IClientService iClientService;
+    private final IClientService iClientService;
 
     @PostMapping("/client")
     public ClientResponse addClient(@RequestBody ClientRequest clientRequest){

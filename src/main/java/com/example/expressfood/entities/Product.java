@@ -33,16 +33,14 @@ public class Product {
     private Collection<OrderItems> orderItems;
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private Collection<FeedBack> feedBacks;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<RawMaterials> rawMaterials;
     private Boolean isDeleted;
     private Boolean isAvailable;
 
-    // FIXME : Product validation
     public void isValid(){
 
-        if(this.name == null || this.name.equals("")
-                || this.unitPrice < 0 || this.unitPrice == null
-                || this.unite == null || this.category == null
-                || this.isDeleted == null || this.isAvailable == null)
+        if(this.name.isEmpty() || this.unitPrice < 0 || this.category == null || this.isDeleted == null || this.isAvailable == null)
             throw new ProductException(ErrorMessages.INVALID_ENTITY.getErrorMessage());
 
     }

@@ -1,7 +1,5 @@
 package com.example.expressfood.entities;
 
-import com.example.expressfood.exception.ErrorMessages;
-import com.example.expressfood.exception.UserException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

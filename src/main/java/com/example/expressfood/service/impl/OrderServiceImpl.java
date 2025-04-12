@@ -1,4 +1,4 @@
-package com.example.expressfood.service.Impl;
+package com.example.expressfood.service.impl;
 
 import com.example.expressfood.dao.*;
 import com.example.expressfood.dto.request.OrderRequest;
@@ -10,49 +10,51 @@ import com.example.expressfood.exception.ErrorMessages;
 import com.example.expressfood.exception.OrderException;
 import com.example.expressfood.exception.UserException;
 import com.example.expressfood.service.*;
+import com.example.expressfood.shared.Constants;
 import com.example.expressfood.shared.MessagesEnum;
-import com.example.expressfood.shared.RoleEnum;
 import com.example.expressfood.shared.StatusEnum;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements IOrderService {
 
-    @Autowired
-    OrdersRepos ordersRepos;
-    @Autowired
-    ICartService iCartService;
-    @Autowired
-    StatusRepos statusRepos;
-    @Autowired
-    ClientRepos clientRepos;
-    @Autowired
-    OrderItemsRepos orderItemsRepos;
-    @Autowired
-    CookRepos cookRepos;
-    @Autowired
-    DeliveryPersonRepos deliveryPersonRepos;
-    @Autowired
-    IUserService iUserService;
-    @Autowired
-    IClientService clientService;
-    @Autowired
-    ICookService cookService;
-    @Autowired
-    IDeliveryService deliveryService;
+    private final OrdersRepos ordersRepos;
+
+    private final ICartService iCartService;
+
+    private final StatusRepos statusRepos;
+
+    private final ClientRepos clientRepos;
+
+    private final OrderItemsRepos orderItemsRepos;
+
+    private final CookRepos cookRepos;
+
+    private final DeliveryPersonRepos deliveryPersonRepos;
+
+    private final IUserService iUserService;
+
+    private final IClientService clientService;
+
+    private final ICookService cookService;
+
+    private final IDeliveryService deliveryService;
+
     @Override
     @Transactional
     public OrderResponse addOrder(OrderRequest orderRequest) {
@@ -95,8 +97,7 @@ public class OrderServiceImpl implements IOrderService {
     public OrderResponse getOrderById(Long orderId) {
         Orders order = ordersRepos.findById(orderId)
                 .orElseThrow(() -> new OrderException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage()));
-        OrderResponse orderResponse = OrderResponse.fromEntity(order);
-        return orderResponse;
+        return OrderResponse.fromEntity(order);
     }
 
     @Override
@@ -116,7 +117,11 @@ public class OrderServiceImpl implements IOrderService {
         Client client = clientRepos.findById(user.getId())
                 .orElseThrow(() -> new UserException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage()));
         Page<Orders> ordersPage;
-        ordersPage = ordersRepos.findByClient(client, PageRequest.of(page, size, Sort.by("createdDate").descending()));
+        ordersPage = ordersRepos.findByClient(client, PageRequest.of(page, size, Sort.by(Constants.CREATED_DATE_SORT).descending()));
+        return getOrderResponsePageResponse(page, size, ordersPage);
+    }
+
+    private PageResponse<OrderResponse> getOrderResponsePageResponse(int page, int size, Page<Orders> ordersPage) {
         PageResponse<OrderResponse> pageResponse = new PageResponse<>();
         pageResponse.setPage(page);
         pageResponse.setSize(size);
@@ -135,15 +140,7 @@ public class OrderServiceImpl implements IOrderService {
                 .orElseThrow(() -> new UserException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage()));
         Page<Orders> ordersPage;
         ordersPage = ordersRepos.findClientOrdersWithStatusIdLessThan(client, 5L, PageRequest.of(page, size));
-        PageResponse<OrderResponse> pageResponse = new PageResponse<>();
-        pageResponse.setPage(page);
-        pageResponse.setSize(size);
-        pageResponse.setTotalPage(ordersPage.getTotalPages());
-        List<OrderResponse> orderResponses = ordersPage.getContent().stream()
-                .map(OrderResponse::fromEntity)
-                .collect(Collectors.toList());
-        pageResponse.setContent(orderResponses);
-        return pageResponse;
+        return getOrderResponsePageResponse(page, size, ordersPage);
     }
 
     @Override
@@ -163,15 +160,7 @@ public class OrderServiceImpl implements IOrderService {
     public PageResponse<OrderResponse> getOrderOfCook(int page, int size) {
         Cook cook = cookService.getAuthenticatedCook();
         Page<Orders> ordersPage = ordersRepos.findByCookAndStatusOrStatus(cook, StatusEnum.IN_PROCESS.value(), StatusEnum.PENDING.value(), PageRequest.of(page, size));
-        PageResponse<OrderResponse> pageResponse = new PageResponse<>();
-        pageResponse.setPage(page);
-        pageResponse.setSize(size);
-        pageResponse.setTotalPage(ordersPage.getTotalPages());
-        List<OrderResponse> orderResponses = ordersPage.getContent().stream()
-                .map(OrderResponse::fromEntity)
-                .collect(Collectors.toList());
-        pageResponse.setContent(orderResponses);
-        return pageResponse;
+        return getOrderResponsePageResponse(page, size, ordersPage);
     }
 
     @Override
@@ -194,41 +183,25 @@ public class OrderServiceImpl implements IOrderService {
         Status status2 = statusRepos.findByLabel(StatusEnum.DISPATCHED.value());
         Status status3 = statusRepos.findByLabel(StatusEnum.DELIVERED.value());
         Page<Orders> ordersPage = ordersRepos.findByDeliveryPersonAndStatusOrStatusOrStatus(deliveryPerson, status1, status2, status3, PageRequest.of(page, size));
-        PageResponse<OrderResponse> pageResponse = new PageResponse<>();
-        pageResponse.setPage(page);
-        pageResponse.setSize(size);
-        pageResponse.setTotalPage(ordersPage.getTotalPages());
-        List<OrderResponse> orderResponses = ordersPage.getContent().stream()
-                .map(OrderResponse::fromEntity)
-                .collect(Collectors.toList());
-        pageResponse.setContent(orderResponses);
-        return pageResponse;
+        return getOrderResponsePageResponse(page, size, ordersPage);
     }
 
     @Override
     public PageResponse<OrderResponse> getOrders(Long statusId, Date deliveryDate, int page, int size) {
-        Page<Orders> ordersPage=null;
+        Page<Orders> ordersPage;
         if (statusId != null && deliveryDate != null) {
             Status status = statusRepos.findById(statusId)
                     .orElseThrow(() -> new OrderException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage()));
-            ordersPage = ordersRepos.findByStatusAndDeliveryDate(status, deliveryDate,PageRequest.of(page, size, Sort.by("createdDate").descending()));
+            ordersPage = ordersRepos.findByStatusAndDeliveryDate(status, deliveryDate,PageRequest.of(page, size, Sort.by(Constants.CREATED_DATE_SORT).descending()));
         } else if (statusId != null) {
             Status status = statusRepos.findById(statusId)
                     .orElseThrow(() -> new OrderException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage()));
-            ordersPage = ordersRepos.findByStatus(status, PageRequest.of(page, size, Sort.by("createdDate").descending()));
+            ordersPage = ordersRepos.findByStatus(status, PageRequest.of(page, size, Sort.by(Constants.CREATED_DATE_SORT).descending()));
         } else if (deliveryDate != null) {
-            ordersPage = ordersRepos.findByDeliveryDate(deliveryDate, PageRequest.of(page, size, Sort.by("createdDate").descending()));
+            ordersPage = ordersRepos.findByDeliveryDate(deliveryDate, PageRequest.of(page, size, Sort.by(Constants.CREATED_DATE_SORT).descending()));
         } else {
-            ordersPage = ordersRepos.findAll(PageRequest.of(page, size, Sort.by("createdDate").descending()));
+            ordersPage = ordersRepos.findAll(PageRequest.of(page, size, Sort.by(Constants.CREATED_DATE_SORT).descending()));
         }
-        PageResponse<OrderResponse> pageResponse = new PageResponse<>();
-        pageResponse.setPage(page);
-        pageResponse.setSize(size);
-        pageResponse.setTotalPage(ordersPage.getTotalPages());
-        List<OrderResponse> orderResponses = ordersPage.getContent().stream()
-                .map(OrderResponse::fromEntity)
-                .collect(Collectors.toList());
-        pageResponse.setContent(orderResponses);
-        return pageResponse;
+        return getOrderResponsePageResponse(page, size, ordersPage);
     }
 }

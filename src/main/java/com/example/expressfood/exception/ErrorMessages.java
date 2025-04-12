@@ -1,7 +1,9 @@
 package com.example.expressfood.exception;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum ErrorMessages {
     MISSING_REQUIRED_FILED("Missing required filed"),
@@ -21,7 +23,4 @@ public enum ErrorMessages {
 
     private final String errorMessage;
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
 }

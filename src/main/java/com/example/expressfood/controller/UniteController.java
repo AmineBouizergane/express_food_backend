@@ -2,11 +2,9 @@ package com.example.expressfood.controller;
 
 import com.example.expressfood.dto.request.UniteRequest;
 import com.example.expressfood.dto.response.MessageResponse;
-import com.example.expressfood.dto.response.PageResponse;
 import com.example.expressfood.dto.response.UniteResponse;
-import com.example.expressfood.entities.Unite;
 import com.example.expressfood.service.IUniteService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +12,15 @@ import java.util.Collection;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
+@RequiredArgsConstructor
 public class UniteController {
 
-    @Autowired
-    IUniteService iUniteService;
+    private final IUniteService iUniteService;
 
     @PostMapping("/unite")
     @PostAuthorize("hasAuthority('ADMIN')")
     public UniteResponse addUnite(@RequestBody UniteRequest uniteRequest){
-        return iUniteService.addUnite(uniteRequest);
+        return iUniteService.addOrUpdateUnite(uniteRequest);
     }
 
     @DeleteMapping("/unite")
@@ -34,7 +32,7 @@ public class UniteController {
     @PutMapping("/unite")
     @PostAuthorize("hasAuthority('ADMIN')")
     public UniteResponse updateUnite(@RequestBody UniteRequest uniteRequest){
-        return iUniteService.updateUnite(uniteRequest);
+        return iUniteService.addOrUpdateUnite(uniteRequest);
     }
 
     @GetMapping("/unite")
